@@ -36,6 +36,25 @@ python sysom_mcp_aws_server.py --sse --host 0.0.0.0 --port 7140
 
 ### Qwen Code 配置
 
+#### 1. 设置环境变量（推荐方式）
+
+Qwen Code 识别 OpenAI 兼容的环境变量，所以用 DeepSeek 的话直接设：
+
+```bash
+export OPENAI_API_KEY=sk-your-deepseek-api-key
+export OPENAI_BASE_URL=https://api.deepseek.com/v1
+```
+
+可以加到 `~/.bashrc` 里持久化：
+
+```bash
+echo 'export OPENAI_API_KEY=sk-your-deepseek-api-key' >> ~/.bashrc
+echo 'export OPENAI_BASE_URL=https://api.deepseek.com/v1' >> ~/.bashrc
+source ~/.bashrc
+```
+
+#### 2. 配置 MCP 服务器
+
 编辑 `~/.qwen/settings.json`：
 
 ```json
@@ -44,16 +63,48 @@ python sysom_mcp_aws_server.py --sse --host 0.0.0.0 --port 7140
     "sysom_aws": {
       "command": "uv",
       "args": ["run", "python", "sysom_mcp_aws_server.py", "--stdio"],
-      "cwd": "/path/to/sysom_mcp_aws",
+      "cwd": "/root/sysom_mcp_aws",
       "timeout": 60000
     }
   }
 }
 ```
 
-### Claude Desktop 配置
+> settings.json 不需要填 authType/apiKey/model 这些，Qwen Code 会自动从环境变量读取。
+
+#### 3. 使用
+
+```bash
+# 非交互模式（单次问答）
+qwen "这台机器的内存是不是有问题？"
+
+# 交互模式（连续对话）
+qwen -i
+```
+
+Qwen Code 内部流程：
+1. 收到问题 → 识别需要诊断数据
+2. 通过 MCP 协议调用本地的 `sysom_aws` 服务器（执行 `memgraph` 等命令）
+3. 把诊断结果发给 DeepSeek API 解读
+4. 返回可读的分析报告
+
+### Claude Desktop 配置（macOS）
 
 编辑 `~/Library/Application Support/Claude/claude_desktop_config.json`：
+
+```json
+{
+  "mcpServers": {
+    "sysom_aws": {
+      "command": "uv",
+      "args": ["run", "python", "sysom_mcp_aws_server.py", "--stdio"],
+      "cwd": "/path/to/sysom_mcp_aws"
+    }
+  }
+}
+```
+
+### Claude Desktop 配置（Linux）
 
 ```json
 {
