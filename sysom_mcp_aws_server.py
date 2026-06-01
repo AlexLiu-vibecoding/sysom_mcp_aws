@@ -19,7 +19,7 @@ import argparse
 from mcp.server.fastmcp import FastMCP
 
 # Import all diagnostic tool modules
-from src.tools import memory, io, network, sched, crash, other, aws_ebs, ai_diagnosis
+from src.tools import memory, io, network, sched, crash, other, aws_ebs
 
 # Import system utilities
 from src.utils.system import detect_os, detect_os_family, get_kernel_version, get_instance_id
@@ -165,63 +165,6 @@ def ebs_performance() -> str:
 def ec2_metadata() -> str:
     """Display detailed EC2 instance metadata including VPC/subnet/security group info."""
     return aws_ebs.ec2_metadata()
-
-
-# ===== AI-Powered Diagnosis (DeepSeek) =====
-
-@mcp.tool()
-def ai_memory_analysis(api_key: str = "") -> str:
-    """Run full memory diagnostics (memgraph + oomcheck + javamem) and analyze with DeepSeek AI.
-    Args:
-        api_key: DeepSeek API key (or set DEEPSEEK_API_KEY env var)
-    """
-    return ai_diagnosis.ai_memory_analysis(api_key)
-
-
-@mcp.tool()
-def ai_io_analysis(api_key: str = "") -> str:
-    """Run full IO diagnostics and analyze with DeepSeek AI.
-    Args:
-        api_key: DeepSeek API key (or set DEEPSEEK_API_KEY env var)
-    """
-    return ai_diagnosis.ai_io_analysis(api_key)
-
-
-@mcp.tool()
-def ai_network_analysis(api_key: str = "") -> str:
-    """Run full network diagnostics and analyze with DeepSeek AI.
-    Args:
-        api_key: DeepSeek API key (or set DEEPSEEK_API_KEY env var)
-    """
-    return ai_diagnosis.ai_network_analysis(api_key)
-
-
-@mcp.tool()
-def ai_scheduler_analysis(api_key: str = "") -> str:
-    """Run full scheduler diagnostics and analyze with DeepSeek AI.
-    Args:
-        api_key: DeepSeek API key (or set DEEPSEEK_API_KEY env var)
-    """
-    return ai_diagnosis.ai_scheduler_analysis(api_key)
-
-
-@mcp.tool()
-def ai_full_diagnosis(api_key: str = "") -> str:
-    """Run ALL diagnostics (memory, IO, network, scheduler, disk) and get DeepSeek AI analysis.
-    Args:
-        api_key: DeepSeek API key (or set DEEPSEEK_API_KEY env var)
-    """
-    return ai_diagnosis.ai_full_diagnosis(api_key)
-
-
-@mcp.tool()
-def ai_ask_deepseek(question: str, api_key: str = "") -> str:
-    """Ask DeepSeek a question about system troubleshooting with auto-collected diagnostics.
-    Args:
-        question: Your question about system issues, performance, or AWS
-        api_key: DeepSeek API key (or set DEEPSEEK_API_KEY env var)
-    """
-    return ai_diagnosis.ai_ask_deepseek(question, api_key)
 
 
 def main():

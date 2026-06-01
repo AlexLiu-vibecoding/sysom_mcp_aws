@@ -4,8 +4,7 @@
 
 ## 核心特性
 
-- **25+ 诊断工具** — 覆盖内存、IO、网络、调度、宕机、磁盘、EBS 等
-- **AI 智能分析 (DeepSeek)** — 运行诊断后自动发送到 DeepSeek AI 解读，给出根因分析和修复建议
+- **20+ 诊断工具** — 覆盖内存、IO、网络、调度、宕机、磁盘、EBS 等
 - **容器感知** — Java 内存诊断自动检测 docker/containerd 运行时，exec 进容器执行 jcmd/jmap
 - **AWS 集成** — 自动获取 EC2 元数据，通过 CloudWatch 分析 EBS 性能指标（Burst Balance、IOPS、Throughput）
 - **Amazon Linux 兼容** — 同时支持 AL2 和 AL2023（cgroup v1/v2、日志系统差异自动适配）
@@ -17,7 +16,7 @@
 
 ```bash
 # 推荐使用 uv
-git clone https://github.com/your-org/sysom_mcp_aws.git
+git clone https://github.com/AlexLiu-vibecoding/sysom_mcp_aws.git
 cd sysom_mcp_aws
 uv sync
 
@@ -115,19 +114,6 @@ python sysom_mcp_aws_server.py --sse --host 0.0.0.0 --port 7140
 | `ebs_performance` | EBS 卷性能分析：Burst Balance、IOPS、Throughput、Queue Length（CloudWatch） |
 | `ec2_metadata` | EC2 实例元数据：VPC、子网、安全组信息 |
 
-### AI 智能诊断 (DeepSeek)
-| 工具 | 说明 |
-|------|------|
-| `ai_memory_analysis(api_key)` | 运行完整内存诊断 → DeepSeek 分析 → 根因定位 + 修复建议 |
-| `ai_io_analysis(api_key)` | 运行完整 IO 诊断 → DeepSeek 分析 |
-| `ai_network_analysis(api_key)` | 运行完整网络诊断 → DeepSeek 分析 |
-| `ai_scheduler_analysis(api_key)` | 运行完整调度诊断 → DeepSeek 分析 |
-| `ai_full_diagnosis(api_key)` | 全量诊断（内存/IO/网络/调度/磁盘）→ DeepSeek 综合健康评估 |
-| `ai_ask_deepseek(question, api_key)` | 提问系统问题，自动采集相关诊断数据后由 DeepSeek 回答 |
-
-API Key 可通过参数传入，或设置环境变量 `DEEPSEEK_API_KEY`。
-免费获取：https://platform.deepseek.com/api_keys
-
 ## 项目结构
 
 ```
@@ -145,14 +131,12 @@ sysom_mcp_aws/
     │   ├── sched.py              # delay, loadtask
     │   ├── crash.py              # vmcore/dmesg 诊断任务管理
     │   ├── other.py              # vmcore (standalone), diskanalysis
-    │   ├── aws_ebs.py            # ebs_performance, ec2_metadata
-    │   └── ai_diagnosis.py       # AI 诊断（DeepSeek 分析层）
+    │   └── aws_ebs.py            # ebs_performance, ec2_metadata
     └── utils/
         ├── __init__.py
         ├── system.py             # 系统命令封装、OS 检测
         ├── container.py          # 容器运行时检测、Java 容器操作
-        ├── aws.py                # EC2 元数据、EBS CloudWatch 指标查询
-        └── ai_agent.py           # DeepSeek API 调用封装
+        └── aws.py                # EC2 元数据、EBS CloudWatch 指标查询
 ```
 
 ## 依赖
@@ -160,7 +144,6 @@ sysom_mcp_aws/
 - Python 3.11+
 - boto3（EBS CloudWatch 指标查询）
 - MCP Python SDK (>=1.0.0)
-- 系统命令: iostat, mpstat, ethtool, jcmd/jmap 等（可选，部分诊断需要）
 
 ## License
 
