@@ -38,19 +38,20 @@ python sysom_mcp_aws_server.py --sse --host 0.0.0.0 --port 7140
 
 #### 1. 设置环境变量（推荐方式）
 
-Qwen Code 识别 OpenAI 兼容的环境变量，所以用 DeepSeek 的话直接设：
+Qwen Code 识别 OpenAI 兼容的环境变量，所以用 DeepSeek 的话直接在 `qwen` 前面加：
 
 ```bash
-export OPENAI_API_KEY=sk-your-deepseek-api-key
-export OPENAI_BASE_URL=https://api.deepseek.com/v1
+OPENAI_API_KEY=sk-your-deepseek-api-key OPENAI_BASE_URL=https://api.deepseek.com/v1 qwen "这台机器的内存是不是有问题？"
 ```
 
-可以加到 `~/.bashrc` 里持久化：
+也可以加到 `~/.bashrc` 里持久化，之后就不用每次输入了：
 
 ```bash
 echo 'export OPENAI_API_KEY=sk-your-deepseek-api-key' >> ~/.bashrc
 echo 'export OPENAI_BASE_URL=https://api.deepseek.com/v1' >> ~/.bashrc
 source ~/.bashrc
+# 之后直接 qwen 就行
+qwen "这台机器的内存是不是有问题？"
 ```
 
 #### 2. 配置 MCP 服务器
