@@ -176,8 +176,9 @@ def main():
     args = parser.parse_args()
 
     if args.sse:
+        import uvicorn
         print(f"Starting SysOM-AWS MCP server (SSE mode) on {args.host}:{args.port}", file=sys.stderr)
-        mcp.run(transport="sse", host=args.host, port=args.port)
+        uvicorn.run(mcp.sse_app(), host=args.host, port=args.port)
     else:
         # Default: stdio mode
         print("Starting SysOM-AWS MCP server (stdio mode)", file=sys.stderr)
